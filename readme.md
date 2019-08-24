@@ -4,8 +4,8 @@
 
 ---
 
-Its a React Native Phonebook app capable of Add, View, Edit and Delete functionality.
-User can place a call and message directly through the phonebook.
+Its a React Native based Phonebook App capable of Adding, Viewing, Editing and Deleting contact.
+User can place a call and message directly through this phonebook app.
 
 **Scope of Improvement**
 
