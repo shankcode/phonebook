@@ -22,9 +22,74 @@ export default class HomeScreen extends React.Component {
     title: "Contact App"
   };
 
+  componentWillMount() {
+    const { navigation } = this.props;
+
+    navigation.addListener("willFocus", () => {
+      this.getAllContacts();
+    });
+  }
+
+  getAllContacts = async () => {
+    await AsyncStorage.getAllKeys()
+      .then(keys => {
+        AsyncStorage.multiGet(keys)
+          .then(result => {
+            this.setState(
+              {
+                data: result.sort((a, b) => {
+                  if (JSON.parse(a[1]).fname < JSON.parse(a[1]).fname) {
+                    return -1;
+                  } else if (JSON.parse(a[1]).fname > JSON.parse(a[1]).fname) {
+                    return 1;
+                  }
+                  return 0;
+                })
+              },
+              () => {
+                // console.log(this.state.data);
+              }
+            );
+          })
+          .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
+  };
+
+  _renderItem = ({ item }) => {
+    contact = JSON.parse(item[1]);
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          this.props.navigation.navigate("View", { key: item[0].toString() })
+        }
+      >
+        <Card style={styles.listItem}>
+          <View style={styles.iconContainer}>
+            <Text style={styles.contactIcon}>
+              {contact.fname[0].toUpperCase()}
+            </Text>
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoText}>
+              {contact.fname} {contact.lname}
+            </Text>
+            <Text style={styles.infoText}>{contact.phone}</Text>
+          </View>
+        </Card>
+      </TouchableOpacity>
+    );
+  };
+
   render() {
     return (
       <View style={styles.container}>
+        <FlatList
+          data={this.state.data}
+          renderItem={this._renderItem}
+          keyExtractor={(item, index) => item[0]}
+        />
+
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate("Add");
@@ -45,7 +110,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     flexDirection: "row",
-    padding: 20
+    padding: 10
   },
   iconContainer: {
     width: 50,

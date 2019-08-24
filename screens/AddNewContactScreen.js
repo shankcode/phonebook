@@ -24,7 +24,7 @@ export default class AddNewContactScreen extends React.Component {
   }
 
   static navigationOptions = {
-    title: "Contact App - Add New Contact"
+    title: "Add New Contact"
   };
 
   saveContact = async () => {
